@@ -1,31 +1,79 @@
 <?php 
 use App\Empleado;
+require("app\EmpleadoEventual.php");
+require("app\EmpleadoPermanente.php");
 
-class EmpleadoTest extends \PHPUnit\Framework\TestCase
-{
+
+abstract class EmpleadoTest extends \PHPUnit\Framework\TestCase
+{ 
     public function testNombre()
     {
-        $this -> expectException(\Exception::class);
-        $e = new \App\Empleado(" ", "Perez", 40251489,15445,"Produccion" );
+
     }
 
     public function testApellido()
     {
-        $e = new \App\Empleado("Juan", " ", 40251489,15445,"Produccion" );
-        $this -> expectException(\Exception::class);
+
     }
 
     public function testDNI()
     {
-        $e = new \App\Empleado("Juan", "Perez ", NULL ,15445,"Produccion" );
-        $this -> expectException(\Exception::class);
+
     }
     public function testSector()
     {
-        $e = new \App\Empleado("Juan", "Perez ",40251489,15445," " );
-        $this -> assertEquals("No especificado", $e->getSector());
+
     }
 }
+
+
+
+class EmpleadoEventualTest extends EmpleadoTest{
+    public function testNombre()
+    {
+        $this -> expectException(\Exception::class);
+        $e = new \App\EmpleadoEventual("", "Perez", 40251489,15445,[4000,1500,3000,3500]);
+    }
+
+    public function testApellido()
+    {   
+        $this -> expectException(\Exception::class);
+        $e = new \App\EmpleadoEventual("Juan","", 40251489,15445,[4000,1500,3000,3500]);
+
+    }
+
+    public function testDNI()
+    {   
+        $this -> expectException(\Exception::class);
+        $e = new \App\EmpleadoEventual("Juan", "Perez ",  0 ,15445, [4000,1500,3000,3500] );
+    }
+    public function testSector()
+    {
+        $e = new \App\EmpleadoEventual("Juan", "Perez ",40251489,15445,[4000,1500,3000,3500] );
+        $this -> assertEquals("No especificado", $e->getSector());
+    }
+
+    public function testcalcularComision()
+    {
+     $ev = new \App\EmpleadoEventual("Juan", "Perez ",40251489,15445,[4000,1500,3000,3500]);
+     $this -> assertEquals(150, $ev->calcularComision());
+    }
+
+    public function testcalcularIngresoTotal()
+    {
+     $ev = new \App\EmpleadoEventual("Juan", "Perez ",40251489,15445,[4000,1500,3000,3500]);
+     $this -> assertEquals(15595, $ev->calcularIngresoTotal());
+    }
+    
+    public function testmontonegativo()
+   {
+    $this -> expectException(\Exception::class);
+    $ev = new \App\EmpleadoEventual("Juan", "Perez ",40251489,15445,[40,15,-2,16]);
+    }
+}
+
+
+
 
 
 ?>
